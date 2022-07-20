@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
+// Контроллер администратора
 @Controller
 public class AdminController {
 
