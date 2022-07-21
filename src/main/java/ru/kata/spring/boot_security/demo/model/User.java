@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -14,7 +15,7 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private Long id;
 
@@ -33,11 +34,12 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
-    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
+    // Set уникальные значения
+    private Set<Role> roles;
 
 //    Получаем роли в виде String
     public String getAllRolesString() {
@@ -53,8 +55,17 @@ public class User implements UserDetails {
 
     }
 
-    public User(Long id, String username, String lastName, int age, String password, String email, List<Role> roles) {
+    public User(Long id, String username, String lastName, int age, String password, String email, Set<Role> roles) {
         this.id = id;
+        this.username = username;
+        this.lastName = lastName;
+        this.age = age;
+        this.password = password;
+        this.email = email;
+        this.roles = roles;
+    }
+
+    public User(String username, String lastName, int age, String password, String email, Set<Role> roles) {
         this.username = username;
         this.lastName = lastName;
         this.age = age;
